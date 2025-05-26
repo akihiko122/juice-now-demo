@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -54,6 +53,7 @@
       border: none;
       border-radius: 4px;
       cursor: pointer;
+      text-align: center;
     }
     .order-summary {
       background: #f0fff0;
@@ -89,46 +89,58 @@
       <li>Coconut Protein</li>
     </ul>
     <p class="price">RM 189.00</p>
-    <button class="button" onclick="document.getElementById('order-form').scrollIntoView()">Order Now</button>
+    <button class="button" onclick="document.getElementById('order-form').scrollIntoView()">Order Now</button><h2 id="order-form">Order Form</h2>
+<form id="orderForm">
+  <label for="name">Full Name:</label>
+  <input type="text" id="name" required>
 
-    <h2 id="order-form">Order Form</h2>
-    <form id="orderForm">
-      <label for="name">Full Name:</label>
-      <input type="text" id="name" required>
+  <label for="phone">Phone Number:</label>
+  <input type="tel" id="phone" required>
 
-      <label for="phone">Phone Number:</label>
-      <input type="tel" id="phone" required>
+  <label for="address">Delivery Address:</label>
+  <textarea id="address" rows="3" required></textarea>
 
-      <label for="address">Delivery Address:</label>
-      <textarea id="address" rows="3" required></textarea>
+  <div class="order-summary">
+    <h3>Order Summary</h3>
+    <p>Subtotal: RM 189.00</p>
+    <p>Delivery: RM 10.00 (flat rate)</p>
+    <p><strong>Total: RM 199.00</strong></p>
+  </div>
 
-      <div class="order-summary">
-        <h3>Order Summary</h3>
-        <p>Subtotal: RM 189.00</p>
-        <p>Delivery: RM 10.00 (flat rate)</p>
-        <p><strong>Total: RM 199.00</strong></p>
-      </div>
+  <p><strong>Payment Methods:</strong> Bank Transfer, Credit/Debit Card, Cash on Delivery</p>
 
-      <p><strong>Payment Methods:</strong> Bank Transfer, Credit/Debit Card, Cash on Delivery</p>
+  <button class="button" type="submit">Confirm Order</button>
+  <a href="#" id="whatsappLink" target="_blank" class="button" style="background-color:#25D366;">Order via WhatsApp</a>
+</form>
 
-      <button class="button" type="submit">Confirm Order</button>
-    </form>
+<div id="confirmation" style="display:none; margin-top: 2rem;">
+  <h2>Thank You!</h2>
+  <p>Your order has been submitted. We'll be in touch soon to confirm delivery.</p>
+</div>
 
-    <div id="confirmation" style="display:none; margin-top: 2rem;">
-      <h2>Thank You!</h2>
-      <p>Your order has been submitted. We'll be in touch soon to confirm delivery.</p>
-    </div>
   </main>
   <footer>
     <p>&copy; 2025 Juice Now. All rights reserved.</p>
-  </footer>
-
-  <script>
+  </footer>  <script>
     document.getElementById('orderForm').addEventListener('submit', function(e) {
       e.preventDefault();
       document.getElementById('orderForm').style.display = 'none';
       document.getElementById('confirmation').style.display = 'block';
     });
-  </script>
-</body>
+
+    document.getElementById('whatsappLink').addEventListener('click', function(e) {
+      const name = document.getElementById('name').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const address = document.getElementById('address').value.trim();
+
+      if (!name || !phone || !address) {
+        alert('Please fill in your name, phone, and address before ordering via WhatsApp.');
+        e.preventDefault();
+        return;
+      }
+
+      const message = `Hi Juice Now! I want to order the 3-day juice cleanse. Here’s my info:%0AName: ${encodeURIComponent(name)}%0APhone: ${encodeURIComponent(phone)}%0AAddress: ${encodeURIComponent(address)}`;
+      this.href = `https://wa.me/60183648836?text=${message}`;
+    });
+  </script></body>
 </html>
