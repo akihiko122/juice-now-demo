@@ -46,12 +46,12 @@
       font-size: 1rem;
     }
     .button {
-      background-color: #2b7a2b;
+      background-color: #25D366;
       color: white;
       padding: 0.75rem;
       font-size: 1rem;
       border: none;
-      border-radius: 4px;
+      border-radius: 30px;
       cursor: pointer;
       text-align: center;
       text-decoration: none;
@@ -59,28 +59,7 @@
       transition: background-color 0.3s ease;
     }
     .button:hover {
-      background-color: #256b25;
-    }
-    .whatsapp-button {
-      background-color: #25D366;
-      color: white;
-      border: none;
-      padding: 0.75rem;
-      font-size: 1rem;
-      border-radius: 30px;
-      text-align: center;
-      display: inline-block;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      text-decoration: none;
-    }
-    .whatsapp-button:hover {
       background-color: #1ebd5a;
-    }
-    .order-buttons {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
     }
     .order-summary {
       background: #f0fff0;
@@ -136,10 +115,7 @@
 
   <p><strong>Payment Methods:</strong> Bank Transfer, Credit/Debit Card, Cash on Delivery</p>
 
-  <div class="order-buttons">
-    <button class="button" type="submit">Confirm Order</button>
-    <a href="#" id="whatsappLink" target="_blank" class="whatsapp-button">Order via WhatsApp</a>
-  </div>
+  <a href="#" id="whatsappLink" target="_blank" class="button">Confirm Order</a>
 </form>
 
 <div id="confirmation" style="display:none; margin-top: 2rem;">
@@ -151,19 +127,13 @@
   <footer>
     <p>&copy; 2025 Juice Now. All rights reserved.</p>
   </footer>  <script>
-    document.getElementById('orderForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      document.getElementById('orderForm').style.display = 'none';
-      document.getElementById('confirmation').style.display = 'block';
-    });
-
     document.getElementById('whatsappLink').addEventListener('click', function(e) {
       const name = document.getElementById('name').value.trim();
       const phone = document.getElementById('phone').value.trim();
       const address = document.getElementById('address').value.trim();
 
       if (!name || !phone || !address) {
-        alert('Please fill in your name, phone, and address before ordering via WhatsApp.');
+        alert('Please fill in your name, phone, and address before confirming your order.');
         e.preventDefault();
         return;
       }
