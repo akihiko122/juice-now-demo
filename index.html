@@ -54,6 +54,33 @@
       border-radius: 4px;
       cursor: pointer;
       text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      transition: background-color 0.3s ease;
+    }
+    .button:hover {
+      background-color: #256b25;
+    }
+    .whatsapp-button {
+      background-color: #25D366;
+      color: white;
+      border: none;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border-radius: 30px;
+      text-align: center;
+      display: inline-block;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      text-decoration: none;
+    }
+    .whatsapp-button:hover {
+      background-color: #1ebd5a;
+    }
+    .order-buttons {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
     }
     .order-summary {
       background: #f0fff0;
@@ -109,8 +136,10 @@
 
   <p><strong>Payment Methods:</strong> Bank Transfer, Credit/Debit Card, Cash on Delivery</p>
 
-  <button class="button" type="submit">Confirm Order</button>
-  <a href="#" id="whatsappLink" target="_blank" class="button" style="background-color:#25D366;">Order via WhatsApp</a>
+  <div class="order-buttons">
+    <button class="button" type="submit">Confirm Order</button>
+    <a href="#" id="whatsappLink" target="_blank" class="whatsapp-button">Order via WhatsApp</a>
+  </div>
 </form>
 
 <div id="confirmation" style="display:none; margin-top: 2rem;">
