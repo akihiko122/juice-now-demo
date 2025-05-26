@@ -1,4 +1,182 @@
-<script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Juice Now - 3-Day Detox & Cleanse</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4fdf6;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    header, footer {
+      background-color: #d0f0d0;
+      padding: 1rem;
+      text-align: center;
+    }
+    header img {
+      max-width: 180px;
+      margin-bottom: 0.5rem;
+    }
+    main {
+      margin: 1rem;
+      padding: 1rem;
+      background: #fff;
+      border-radius: 8px;
+    }
+    .carousel-section {
+      margin: 2rem 0;
+      text-align: center;
+    }
+    .carousel-container {
+      position: relative;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    .carousel-slide {
+      display: none;
+      width: 100%;
+      border-radius: 10px;
+    }
+    .carousel-slide.active {
+      display: block;
+    }
+    .carousel-buttons {
+      display: flex;
+      justify-content: center;
+      margin-top: 0.5rem;
+    }
+    .carousel-buttons button {
+      background-color: #2b7a2b;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      margin: 0 0.25rem;
+      cursor: pointer;
+      font-size: 1rem;
+      border-radius: 4px;
+    }
+    .price {
+      color: orange;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    label {
+      font-weight: bold;
+    }
+    input, textarea {
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+    .button {
+      background-color: #25D366;
+      color: white;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      transition: background-color 0.3s ease;
+    }
+    .button:hover {
+      background-color: #1ebd5a;
+    }
+    .order-summary {
+      background: #f0fff0;
+      padding: 1rem;
+      border: 1px solid #c0ecc0;
+      border-radius: 4px;
+    }
+    ul {
+      padding-left: 1.25rem;
+    }
+    @media (min-width: 600px) {
+      main {
+        max-width: 600px;
+        margin: 2rem auto;
+      }
+    }
+  </style>
+  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
+</head>
+<body>
+  <header>
+    <img src="file-ALwQhaNh2h96vK54UpQM48" alt="Juice Now Logo"/>
+    <p>Your 3-Day Body Cleanse Specialist</p>
+  </header>
+
+  <main>
+    <h2>3-Day Detox & Cleanse Package</h2>
+    <p>Includes 18 bottles (350ml each) with 6 flavors for a full body reset. Designed for weight loss, energy boost, and digestive wellness.</p>
+    <ul>
+      <li>Kale Barley Seedling</li>
+      <li>Turmeric Passion Fruit</li>
+      <li>Red Dates Beetroot</li>
+      <li>Vitamin C Team</li>
+      <li>Kiwifruits Avocado</li>
+      <li>Coconut Protein</li>
+    </ul>
+    <p class="price">RM 189.00</p>
+    <button class="button" onclick="document.getElementById('order-form').scrollIntoView()">Order Now</button>
+
+    <div class="carousel-section">
+      <div class="carousel-container">
+        <img src="slide1.jpg" class="carousel-slide active" alt="Slide 1"/>
+        <img src="slide2.jpg" class="carousel-slide" alt="Slide 2"/>
+        <img src="slide3.jpg" class="carousel-slide" alt="Slide 3"/>
+        <img src="slide4.jpg" class="carousel-slide" alt="Slide 4"/>
+      </div>
+      <div class="carousel-buttons">
+        <button onclick="prevSlide()">◀</button>
+        <button onclick="nextSlide()">▶</button>
+      </div>
+    </div>
+
+    <h2 id="order-form">Order Form</h2>
+    <form id="orderForm">
+      <label for="name">Full Name:</label>
+      <input type="text" id="name" required/>
+
+      <label for="phone">Phone Number:</label>
+      <input type="tel" id="phone" required/>
+
+      <label for="address">Delivery Address:</label>
+      <input type="text" id="address" required placeholder="Enter your address"/>
+
+      <div class="order-summary">
+        <h3>Order Summary</h3>
+        <p>Subtotal: RM <span id="subtotal">189.00</span></p>
+        <p>Delivery: RM <span id="deliveryFee">0.00</span></p>
+        <p><strong>Total: RM <span id="total">189.00</span></strong></p>
+      </div>
+
+      <a href="#" id="whatsappLink" target="_blank" class="button">Confirm Order</a>
+    </form>
+
+    <div id="confirmation" style="display:none; margin-top: 2rem;">
+      <h2>Thank You!</h2>
+      <p>Your order has been submitted. We'll be in touch soon to confirm delivery.</p>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Juice Now. All rights reserved.</p>
+  </footer>
+
+  <script>
     const origin = '3.1390,101.6869';
 
     function calculateDeliveryFee(destination) {
@@ -11,7 +189,6 @@
       }, function (response, status) {
         if (status === 'OK') {
           const distanceValue = response.rows[0].elements[0].distance.value / 1000;
-
           let fee = 0;
           if (distanceValue > 30) fee = 30;
           else if (distanceValue > 20) fee = 25;
@@ -19,7 +196,6 @@
           else if (distanceValue > 10) fee = 15;
           else if (distanceValue > 5) fee = 10;
           else if (distanceValue > 0) fee = 5;
-
           document.getElementById('deliveryFee').textContent = fee.toFixed(2);
           document.getElementById('total').textContent = (189 + fee).toFixed(2);
         }
@@ -27,8 +203,6 @@
     }
 
     window.onload = function () {
-      initAutocomplete();
-
       const input = document.getElementById('address');
       const autocomplete = new google.maps.places.Autocomplete(input);
       autocomplete.addListener('place_changed', function () {
@@ -49,18 +223,15 @@
         });
       }
 
-      function nextSlide() {
+      window.nextSlide = function () {
         currentSlide = (currentSlide + 1) % slides.length;
         showSlide(currentSlide);
-      }
+      };
 
-      function prevSlide() {
+      window.prevSlide = function () {
         currentSlide = (currentSlide - 1 + slides.length) % slides.length;
         showSlide(currentSlide);
-      }
-
-      document.querySelector('.carousel-buttons button:nth-child(1)').onclick = prevSlide;
-      document.querySelector('.carousel-buttons button:nth-child(2)').onclick = nextSlide;
+      };
 
       const carousel = document.querySelector('.carousel-container');
       let startX = 0;
@@ -94,4 +265,6 @@
       const message = `Hi Juice Now! I want to order the 3-day juice cleanse. Here’s my info:%0AName: ${encodeURIComponent(name)}%0APhone: ${encodeURIComponent(phone)}%0AAddress: ${encodeURIComponent(address)}%0ADelivery Fee: RM ${fee}%0ATotal: RM ${total}`;
       this.href = `https://wa.me/60183648836?text=${message}`;
     });
-</script>
+  </script>
+</body>
+</html>
