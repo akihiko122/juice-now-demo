@@ -1,3 +1,11 @@
+# Rebuild everything after session reset
+
+from zipfile import ZipFile
+from pathlib import Path
+from shutil import copyfile
+
+# Minimal fallback index.html to enable full zip creation
+index_html = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,3 +18,43 @@
   <p>This placeholder homepage can be replaced with your real HTML export.</p>
 </body>
 </html>
+"""
+
+index_path = Path("/mnt/data/index.html")
+index_path.write_text(index_html.strip(), encoding="utf-8")
+
+# Files to re-include
+image_files = {
+    "juice_3day.jpg": "file-EjyVFdBxUwigYm6rGqJW6A",
+    "juice_1day.jpg": "file-DVoAiD11BBrbL4pyDW8KwB",
+    "juice_7day.jpg": "file-GSXqoKqqfpngc2vawxf13u",
+    "slide1.jpg": "file-F8v1eBbfzKvvhT9RzHFXhA",
+    "slide2.jpg": "file-Jy4v4i6AW4fYdzT5Vyb11o",
+    "slide3.jpg": "file-Wzc3RcQpxKC73Ar2nM252d",
+    "slide4.jpg": "file-XHDTKHcj6PJC12fFgsgQxg",
+    "flavor1.jpg": "file-TFCXm8DZ4gQF48sSGrLAsN",
+    "flavor2.jpg": "file-REu4fvHvTbdgofRhj2Cpg5",
+    "flavor3.jpg": "file-UYQTejBd13PSBTGncCrPe2",
+    "flavor4.jpg": "file-Ds5YNjuwjnD2PASbypMtwo",
+    "flavor5.jpg": "file-K4UDuDDnyeTvzCtvFo2TjW",
+    "flavor6.jpg": "file-CyGp1t1dctKQR4WjuFZTTj",
+    "flavor7.jpg": "file-7fV549E1oVycVRsUDjv9L7"
+}
+
+# Copy image files with new names
+for name, fid in image_files.items():
+    src = Path(f"/mnt/data/{fid}")
+    dst = Path(f"/mnt/data/{name}")
+    if src.exists():
+        copyfile(src, dst)
+
+# Zip all files
+zip_path = "/mnt/data/juice_now_final_site.zip"
+with ZipFile(zip_path, "w") as zipf:
+    zipf.write(index_path, arcname="index.html")
+    for name in image_files.keys():
+        path = Path(f"/mnt/data/{name}")
+        if path.exists():
+            zipf.write(path, arcname=name)
+
+zip_path
