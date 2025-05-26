@@ -137,13 +137,15 @@
         unitSystem: google.maps.UnitSystem.METRIC
       }, function (response, status) {
         if (status === 'OK') {
-          const distanceText = response.rows[0].elements[0].distance.text;
           const distanceValue = response.rows[0].elements[0].distance.value / 1000; // in km
 
           let fee = 0;
-          if (distanceValue > 20) fee = 20;
-          else if (distanceValue > 10) fee = 10;
-          else if (distanceValue > 5) fee = 5;
+          if (distanceValue > 30) fee = 30;
+          else if (distanceValue > 20) fee = 25;
+          else if (distanceValue > 15) fee = 20;
+          else if (distanceValue > 10) fee = 15;
+          else if (distanceValue > 5) fee = 10;
+          else if (distanceValue > 0) fee = 5;
 
           document.getElementById('deliveryFee').textContent = fee.toFixed(2);
           document.getElementById('total').textContent = (189 + fee).toFixed(2);
