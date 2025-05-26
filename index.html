@@ -77,6 +77,7 @@
       }
     }
   </style>
+  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
 </head>
 <body>
   <header>
@@ -104,16 +105,14 @@
   <input type="tel" id="phone" required>
 
   <label for="address">Delivery Address:</label>
-  <textarea id="address" rows="3" required></textarea>
+  <input type="text" id="address" required placeholder="Enter your address">
 
   <div class="order-summary">
     <h3>Order Summary</h3>
-    <p>Subtotal: RM 189.00</p>
-    <p>Delivery: RM 10.00 (flat rate)</p>
-    <p><strong>Total: RM 199.00</strong></p>
+    <p>Subtotal: RM <span id="subtotal">189.00</span></p>
+    <p>Delivery: RM <span id="deliveryFee">0.00</span></p>
+    <p><strong>Total: RM <span id="total">189.00</span></strong></p>
   </div>
-
-  <p><strong>Payment Methods:</strong> Bank Transfer, Credit/Debit Card, Cash on Delivery</p>
 
   <a href="#" id="whatsappLink" target="_blank" class="button">Confirm Order</a>
 </form>
@@ -127,10 +126,50 @@
   <footer>
     <p>&copy; 2025 Juice Now. All rights reserved.</p>
   </footer>  <script>
-    document.getElementById('whatsappLink').addEventListener('click', function(e) {
+    const origin = '3.1390,101.6869'; // Replace with your actual shop location (KL center)
+
+    function calculateDeliveryFee(destination) {
+      const service = new google.maps.DistanceMatrixService();
+      service.getDistanceMatrix({
+        origins: [origin],
+        destinations: [destination],
+        travelMode: 'DRIVING',
+        unitSystem: google.maps.UnitSystem.METRIC
+      }, function (response, status) {
+        if (status === 'OK') {
+          const distanceText = response.rows[0].elements[0].distance.text;
+          const distanceValue = response.rows[0].elements[0].distance.value / 1000; // in km
+
+          let fee = 0;
+          if (distanceValue > 20) fee = 20;
+          else if (distanceValue > 10) fee = 10;
+          else if (distanceValue > 5) fee = 5;
+
+          document.getElementById('deliveryFee').textContent = fee.toFixed(2);
+          document.getElementById('total').textContent = (189 + fee).toFixed(2);
+        }
+      });
+    }
+
+    function initAutocomplete() {
+      const input = document.getElementById('address');
+      const autocomplete = new google.maps.places.Autocomplete(input);
+
+      autocomplete.addListener('place_changed', function () {
+        const place = autocomplete.getPlace();
+        if (place.geometry && place.geometry.location) {
+          const destination = place.geometry.location.lat() + ',' + place.geometry.location.lng();
+          calculateDeliveryFee(destination);
+        }
+      });
+    }
+
+    document.getElementById('whatsappLink').addEventListener('click', function (e) {
       const name = document.getElementById('name').value.trim();
       const phone = document.getElementById('phone').value.trim();
       const address = document.getElementById('address').value.trim();
+      const fee = document.getElementById('deliveryFee').textContent.trim();
+      const total = document.getElementById('total').textContent.trim();
 
       if (!name || !phone || !address) {
         alert('Please fill in your name, phone, and address before confirming your order.');
@@ -138,8 +177,10 @@
         return;
       }
 
-      const message = `Hi Juice Now! I want to order the 3-day juice cleanse. Here’s my info:%0AName: ${encodeURIComponent(name)}%0APhone: ${encodeURIComponent(phone)}%0AAddress: ${encodeURIComponent(address)}`;
+      const message = `Hi Juice Now! I want to order the 3-day juice cleanse. Here’s my info:%0AName: ${encodeURIComponent(name)}%0APhone: ${encodeURIComponent(phone)}%0AAddress: ${encodeURIComponent(address)}%0ADelivery Fee: RM ${fee}%0ATotal: RM ${total}`;
       this.href = `https://wa.me/60183648836?text=${message}`;
     });
+
+    window.onload = initAutocomplete;
   </script></body>
 </html>
